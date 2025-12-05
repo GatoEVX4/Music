@@ -23,7 +23,6 @@ namespace Music
 
         private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);        
         [DllImport("user32.dll", SetLastError = true)] private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
         public ViewMode CurrentViewMode { get; set; } = ViewMode.TaskBar;
 
         public MainWindow()
@@ -37,8 +36,7 @@ namespace Music
             {
                 var handle = new System.Windows.Interop.WindowInteropHelper(this).Handle;
                 SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-            };
-            _timer.Start();
+            };            
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -48,15 +46,11 @@ namespace Music
                 switch (CurrentViewMode)
                 {
                     case ViewMode.TaskBar:
-                        PositionateWindow();
-                        _timer.Stop();
-                        CurrentViewMode = ViewMode.Window;
+                        PositionateWindow();                        
                         break;
 
                     case ViewMode.Window:
-                        PositionateTaskBar();
-                        _timer.Start();
-                        CurrentViewMode = ViewMode.TaskBar;
+                        PositionateTaskBar();                        
                         break;
                 }
             }
@@ -74,21 +68,20 @@ namespace Music
 
         private void PositionateWindow()
         {
+            _timer.Stop();
             Height = 82;
             Left = 3;
             Top = SystemParameters.WorkArea.Bottom - Height - 3;
+            CurrentViewMode = ViewMode.Window;
         }
 
         private void PositionateTaskBar()
         {
+            _timer.Start();
             Height = 42;
             Left = 3;
             Top = SystemParameters.WorkArea.Bottom - Height + 44.5;
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            
+            CurrentViewMode = ViewMode.TaskBar;
         }
     }
 }

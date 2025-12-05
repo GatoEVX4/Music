@@ -17,6 +17,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using static Music.API;
 using static System.Net.WebRequestMethods;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace Music
 {
@@ -107,14 +108,12 @@ namespace Music
             transform.BeginAnimation(TranslateTransform.XProperty, scrollAnim);
         }
 
-
         public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
         {
             if (value.CompareTo(min) < 0) return min;
             if (value.CompareTo(max) > 0) return max;
             return value;
         }
-
 
         private async Task Shazam(CancellationToken cancellationToken)
         {
@@ -243,6 +242,8 @@ namespace Music
             Artist.Foreground = new SolidColorBrush(Color.FromRgb(229, 229, 229));
             Genre.Foreground = new SolidColorBrush(Color.FromRgb(229, 229, 229));
 
+            blackborderformusictitle.Visibility = Visibility.Collapsed;
+
             if (result.JoeColor != null)
             {
                 Name.Foreground = result.JoeColor.Primary;
@@ -252,6 +253,9 @@ namespace Music
                 Visualizer.brush = result.JoeColor.Tertiary;
                 Visualizer.InitializeBars();
                 Background.Background = result.JoeColor.Background;
+
+                blackborderformusictitle.Visibility = IsBrushLight(result.JoeColor.Tertiary) && IsBrushLight(result.JoeColor.Tertiary) ? Visibility.Visible : Visibility.Collapsed;
+                blackborderformusictitle2.Visibility = !IsBrushLight(result.JoeColor.Tertiary) && !IsBrushLight(result.JoeColor.Tertiary) ? Visibility.Visible : Visibility.Collapsed;
             }
 
             if (result.CoverArtUrl == null)
@@ -275,6 +279,19 @@ namespace Music
 
             stackpa.Margin = new Thickness(50, 0, 10, 0);
             Visualizer.Margin = new Thickness(50, 0, 10, 0);
+        }
+
+        public static bool IsColorLight(Color color)
+        {
+            double luminance = (0.2126 * color.R) + (0.7152 * color.G) + (0.0722 * color.B);
+            return luminance > 128;
+        }
+
+        public static bool IsBrushLight(Brush brush)
+        {
+            if (brush is SolidColorBrush solid)
+                return IsColorLight(solid.Color);
+            return false;
         }
     }
 

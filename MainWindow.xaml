@@ -10,7 +10,6 @@
     Height="82"
     AllowsTransparency="True"
     Background="Transparent"
-    Closing="Window_Closing"
     MouseDown="Window_MouseDown"
     ResizeMode="NoResize"
     ShowInTaskbar="False"

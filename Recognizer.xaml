@@ -90,7 +90,17 @@
                         </EventTrigger>
                     </Grid.Triggers>
 
-                    <Border Background="#7F000000" CornerRadius="5" />
+                    <Border
+                        x:Name="blackborderformusictitle"
+                        Background="#7F000000"
+                        CornerRadius="5"
+                        Visibility="Collapsed" />
+
+                    <Border
+                        x:Name="blackborderformusictitle2"
+                        Background="#4CFFFFFF"
+                        CornerRadius="5"
+                        Visibility="Collapsed" />
 
                     <StackPanel
                         x:Name="stackpa"
