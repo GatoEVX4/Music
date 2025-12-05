@@ -78,7 +78,10 @@
                     </Image>
                 </Grid>
 
-                <StackPanel Margin="55,0,0,0" VerticalAlignment="Center">
+                <StackPanel
+                    x:Name="stackpa"
+                    Margin="55,0,0,0"
+                    VerticalAlignment="Center">
                     <Canvas Height="24" ClipToBounds="True">
                         <TextBlock
                             x:Name="Name"

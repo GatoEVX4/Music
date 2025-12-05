@@ -256,6 +256,9 @@ namespace Music
                 MusicImg.Source = null;
                 MusicImgBackground.Source = null;
                 MusicImageGlow.Background = null;
+
+                stackpa.Margin = new Thickness(10, 0, 0, 0);
+                stackpa.Margin = new Thickness(10, 0, 0, 0);
                 return;
             }
 
@@ -266,6 +269,9 @@ namespace Music
             MusicImg.Source = bitmap;
             MusicImgBackground.Source = bitmap;
             MusicImageGlow.Background = brush;
+
+            stackpa.Margin = new Thickness(55, 0, 0, 0);
+            stackpa.Margin = new Thickness(55, 0, 0, 0);
         }
     }
 
