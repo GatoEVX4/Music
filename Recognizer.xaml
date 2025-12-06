@@ -98,7 +98,7 @@
 
                     <Border
                         x:Name="blackborderformusictitle2"
-                        Background="#4CFFFFFF"
+                        Background="#19FFFFFF"
                         CornerRadius="5"
                         Visibility="Collapsed" />
 

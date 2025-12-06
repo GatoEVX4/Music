@@ -1,6 +1,7 @@
 ﻿using Force.Crc32;
 using MathNet.Numerics;
 using MathNet.Numerics.IntegralTransforms;
+using Microsoft.VisualBasic.Logging;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using System.IO;
@@ -21,6 +22,17 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace Music
 {
+    public static class Logger
+    {
+        public static void Log(string text, ConsoleColor color)
+        {
+            var previousc = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ForegroundColor = previousc;
+        }
+    }
+
     public partial class Recognizer : UserControl
     {
         private DateTime lastrecognized;
@@ -50,6 +62,7 @@ namespace Music
                 {
                     await Shazam(new CancellationToken());
                     var delay = Clamp(streak * 2000, 4000, 8000);
+                    Logger.Log($"Shazam Request Delay: {delay}", ConsoleColor.DarkCyan);
                     await Task.Delay(delay);
                 }
                 catch { }
@@ -113,7 +126,7 @@ namespace Music
             if (value.CompareTo(min) < 0) return min;
             if (value.CompareTo(max) > 0) return max;
             return value;
-        }
+        }        
 
         private async Task Shazam(CancellationToken cancellationToken)
         {
@@ -134,6 +147,7 @@ namespace Music
             var sampleProvider = resampler.ToSampleProvider();
 
             int retryMs = Clamp(streak * 2000, 3000, 8000);
+            Logger.Log($"Listening to {retryMs}ms of desktop audio...", ConsoleColor.Magenta);
 
             try
             {
@@ -156,7 +170,7 @@ namespace Music
                     {
                         if (siglenght == signature.Length)
                         {
-                            //Console.WriteLine("nothing playing");
+                            Logger.Log("nothing playing", ConsoleColor.DarkRed);
                             await Dispatcher.InvokeAsync(() =>
                             {
                                 Visibility = Visibility.Collapsed;
@@ -175,7 +189,8 @@ namespace Music
 
                     lastsigsent = signature;
 
-                    //Console.WriteLine($"ProcessedMs: {analysis.ProcessedMs} Sig Lenght: {signature.Length}");
+                    Logger.Log($"Signature (Base64): {Convert.ToBase64String(signature)}", ConsoleColor.DarkGray);
+                    Logger.Log($"Processed Audio Ms: {analysis.ProcessedMs} Sig Lenght: {signature.Length}", ConsoleColor.Yellow);
                     var (result, rawResponse) = await ShazamApi.SendRequest(analysis.ProcessedMs, signature);
 
                     if (!result.Success)
@@ -207,13 +222,13 @@ namespace Music
                         UpdateUIWithSong(result);
                     });
 
-                    //Console.WriteLine($"{result.Artist} {result.Title}");
+                    Logger.Log($"Recognized: {result.Artist} {result.Title}", ConsoleColor.Green);
                     break;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error Recognizing Song: {ex.Message}");
+                Logger.Log($"Error Recognizing Song: {ex.Message}", ConsoleColor.Red);
             }
             finally
             {
@@ -376,7 +391,7 @@ namespace Music
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Request error: {ex.Message}");
+                    Logger.Log($"Request error: {ex.Message}", ConsoleColor.Red);
                     return (new ShazamResult
                     {
                         IsError = true,
