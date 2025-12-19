@@ -71,7 +71,11 @@ namespace Music
             _timer.Stop();
             Height = 82;
             Left = 3;
-            Top = SystemParameters.WorkArea.Bottom - Height - 3;
+            try
+            {
+                Top = SystemParameters.WorkArea.Bottom - Height - 3;
+            }
+            catch { }
             CurrentViewMode = ViewMode.Window;
         }
 
@@ -80,7 +84,11 @@ namespace Music
             _timer.Start();
             Height = 42;
             Left = 3;
-            Top = SystemParameters.WorkArea.Bottom - Height + 44.5;
+            try
+            {
+                Top = SystemParameters.WorkArea.Bottom - Height + 44.5;
+            }
+            catch { }
             CurrentViewMode = ViewMode.TaskBar;
         }
     }

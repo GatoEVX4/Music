@@ -61,7 +61,7 @@ namespace Music
                 try
                 {
                     await Shazam(new CancellationToken());
-                    var delay = Clamp(streak * 2000, 2000, 5000);
+                    var delay = Clamp(streak * 2200, 2200, 5500);
                     Logger.Log($"Shazam Request Delay: {delay}", ConsoleColor.DarkCyan);
                     await Task.Delay(delay);
                 }
@@ -174,18 +174,14 @@ namespace Music
                             streak = 1;
                             await Dispatcher.InvokeAsync(() =>
                             {
-                                Visibility = Visibility.Collapsed;
+                                MusicImgBackground.Visibility = Visibility.Collapsed;
+                                InfoBar.Visibility = Visibility.Collapsed;
                             });
                             break;
                         }
                         siglenght = signature.Length;
                         continue;
                     }
-
-                    await Dispatcher.InvokeAsync(() =>
-                    {
-                        Visibility = Visibility.Visible;
-                    });
 
                     if (signature == lastsigsent)
                     {
@@ -207,7 +203,11 @@ namespace Music
                             if (DateTime.Now - lastrecognized > TimeSpan.FromSeconds(10))
                             {
                                 streak = 11;
-                                //await Dispatcher.InvokeAsync(() => Visibility = Visibility.Collapsed);
+                                await Dispatcher.InvokeAsync(() =>
+                                {
+                                    MusicImgBackground.Visibility = Visibility.Collapsed;
+                                    InfoBar.Visibility = Visibility.Collapsed;
+                                });
                             }
                             break;
                         }
@@ -224,7 +224,8 @@ namespace Music
 
                     await Dispatcher.InvokeAsync(() =>
                     {
-                        Visibility = Visibility.Visible;
+                        MusicImgBackground.Visibility = Visibility.Visible;
+                        InfoBar.Visibility = Visibility.Visible;
                         UpdateUIWithSong(result);
                     });
 
@@ -264,6 +265,7 @@ namespace Music
             Genre.Foreground = new SolidColorBrush(Color.FromRgb(229, 229, 229));
 
             blackborderformusictitle.Visibility = Visibility.Collapsed;
+            blackborderformusictitle2.Visibility = Visibility.Collapsed;
 
             if (result.JoeColor != null)
             {

@@ -43,7 +43,7 @@
 
             <local:Visualizer x:Name="Visualizer" Margin="55,-5,0,-5" />
 
-            <Grid HorizontalAlignment="Stretch" IsHitTestVisible="False">
+            <Grid x:Name="InfoBar" HorizontalAlignment="Stretch" IsHitTestVisible="False">
                 <Grid
                     Width="30"
                     Margin="10,0,0,0"
